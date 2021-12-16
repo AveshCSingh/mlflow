@@ -543,9 +543,16 @@ def safe_patch(
                     )
 
                     if patch_is_class:
-                        patch_function.call(call_original, *args, **kwargs)
+                        resp = patch_function.call(call_original, *args, **kwargs)
                     else:
-                        patch_function(call_original, *args, **kwargs)
+                        resp = patch_function(call_original, *args, **kwargs)
+
+                    print("Avesh: training_sets = ")
+                    print(training_sets)
+                    print("resp = ")
+                    print(resp)
+                    print(f"og_args = {og_args}")
+                    print(f"og_kwargs = {og_kwargs}")
 
                     session.state = "succeeded"
 
