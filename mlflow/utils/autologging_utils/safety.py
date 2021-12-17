@@ -554,7 +554,7 @@ def safe_patch(
                         print(f"og_args = {og_args}")
                         print(f"og_kwargs = {og_kwargs}")
                     except Exception as e:
-                        print(f"Avesh: Saw exception")
+                        print(f"Avesh: Saw exception {e}")
 
                     session.state = "succeeded"
 
