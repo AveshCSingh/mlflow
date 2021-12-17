@@ -497,7 +497,8 @@ def safe_patch(
                     raise
 
             with _AutologgingSessionManager.start_session(autologging_integration) as session:
-                try:
+                #try:
+                if True:
 
                     def call_original(*og_args, **og_kwargs):
                         def _original_fn(*_og_args, **_og_kwargs):
@@ -553,15 +554,16 @@ def safe_patch(
                     if training_sets is None:
                         print("Avesh: training_sets was None")
                         training_sets = {}
-                    try:
-                        print(training_sets)
-                        print("resp = ")
-                        print(resp)
-                        print(f"og_args = {og_args}")
-                        print(f"og_kwargs = {og_kwargs}")
-                    except Exception as e:
-                        print(f"Avesh: Saw exception {e}")
-                        print()
+
+                    #try:
+                    print(training_sets)
+                    print("resp = ")
+                    print(resp)
+                    print(f"og_args = {og_args}")
+                    print(f"og_kwargs = {og_kwargs}")
+                    # except Exception as e:
+                    #     print(f"Avesh: Saw exception {e}")
+                    #     print()
 
                     session.state = "succeeded"
 
@@ -573,14 +575,14 @@ def safe_patch(
                         args,
                         kwargs,
                     )
-                except Exception as e:
-                    session.state = "failed"
-                    patch_function_exception = e
-                    # Exceptions thrown during execution of the original function should be
-                    # propagated to the caller. Additionally, exceptions encountered during test
-                    # mode should be reraised to detect bugs in autologging implementations
-                    if failed_during_original or is_testing():
-                        raise
+                # except Exception as e:
+                #     session.state = "failed"
+                #     patch_function_exception = e
+                #     # Exceptions thrown during execution of the original function should be
+                #     # propagated to the caller. Additionally, exceptions encountered during test
+                #     # mode should be reraised to detect bugs in autologging implementations
+                #     if failed_during_original or is_testing():
+                #         raise
 
                 if is_testing() and not preexisting_run_for_testing:
                     # If an MLflow run was created during the execution of patch code, verify that
