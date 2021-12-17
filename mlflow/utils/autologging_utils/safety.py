@@ -30,6 +30,8 @@ _AUTOLOGGING_PATCHES = {}
 # `picklable_exception_safe_function` decorators
 _ATTRIBUTE_EXCEPTION_SAFE = "exception_safe"
 
+training_sets = None
+
 
 def exception_safe_function_for_class(function):
     """
