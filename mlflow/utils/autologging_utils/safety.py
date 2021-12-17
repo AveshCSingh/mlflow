@@ -553,8 +553,8 @@ def safe_patch(
                     # if training_sets is None:
                     #     training_sets = {}
 
-                    print(autologging_utils.fs_training_sets)
-                    print(f"resp = {resp}")
+                    # print(autologging_utils.fs_training_sets)
+                    # print(f"resp = {resp}")
 
                     session.state = "succeeded"
 

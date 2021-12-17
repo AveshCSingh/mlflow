@@ -60,6 +60,7 @@ from mlflow.utils.autologging_utils import (
     update_wrapper_extended,
 )
 from mlflow.tracking._model_registry import DEFAULT_AWAIT_MAX_SLEEP_SECONDS
+from mlflow.utils import autologging_utils
 
 FLAVOR_NAME = "sklearn"
 
@@ -1248,6 +1249,7 @@ def _autolog(
                 signature=signature,
                 input_example=input_example,
             )
+
         return fit_output
 
     def fit_mlflow(original, self, *args, **kwargs):
@@ -1369,6 +1371,10 @@ def _autolog(
                 signature=signature,
                 input_example=input_example,
             )
+
+            # TODO: Insert fs.log_model here
+            print(f"Found training_sets: {autologging_utils.fs_training_sets}")
+            print(f"Signature: {signature}")
 
         if _is_parameter_search_estimator(estimator):
             if hasattr(estimator, "best_estimator_") and log_models:
