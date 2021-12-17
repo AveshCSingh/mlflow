@@ -547,6 +547,7 @@ def safe_patch(
                     else:
                         resp = patch_function(call_original, *args, **kwargs)
 
+                    global training_sets
                     try:
                         print(training_sets)
                         print("resp = ")
