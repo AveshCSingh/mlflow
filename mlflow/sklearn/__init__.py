@@ -1374,7 +1374,10 @@ def _autolog(
 
             # TODO: Insert fs.log_model here
             print(f"Found training_sets: {autologging_utils.fs_training_sets}")
-            print(f"Signature: {signature}")
+            input_cols = tuple(signature.to_dict().keys())
+            print(f"input_cols: {input_cols}")
+            training_set = autologging_utils.fs_training_sets[input_cols]
+            print(f"training_set: {training_set}")
 
         if _is_parameter_search_estimator(estimator):
             if hasattr(estimator, "best_estimator_") and log_models:
