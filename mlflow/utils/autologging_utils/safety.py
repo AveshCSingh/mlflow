@@ -548,6 +548,9 @@ def safe_patch(
                         resp = patch_function(call_original, *args, **kwargs)
 
                     global training_sets
+                    if training_sets is None:
+                        print("Avesh: training_sets was None")
+                        training_sets = {}
                     try:
                         print(training_sets)
                         print("resp = ")
@@ -556,6 +559,7 @@ def safe_patch(
                         print(f"og_kwargs = {og_kwargs}")
                     except Exception as e:
                         print(f"Avesh: Saw exception {e}")
+                        print()
 
                     session.state = "succeeded"
 
