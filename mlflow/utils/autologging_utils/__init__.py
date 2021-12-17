@@ -10,6 +10,8 @@ from mlflow.entities import Metric
 from mlflow.tracking.client import MlflowClient
 from mlflow.utils.validation import MAX_METRICS_PER_BATCH
 
+fs_training_sets = {}
+
 # Define the module-level logger for autologging utilities before importing utilities defined in
 # submodules (e.g., `safety`, `events`) that depend on the module-level logger. Add the `noqa: E402`
 # comment after each subsequent import to ignore "import not at top of file" code style errors

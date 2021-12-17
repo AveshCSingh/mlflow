@@ -30,8 +30,6 @@ _AUTOLOGGING_PATCHES = {}
 # `picklable_exception_safe_function` decorators
 _ATTRIBUTE_EXCEPTION_SAFE = "exception_safe"
 
-training_sets = None
-
 
 def exception_safe_function_for_class(function):
     """
@@ -550,20 +548,12 @@ def safe_patch(
                     else:
                         resp = patch_function(call_original, *args, **kwargs)
 
-                    global training_sets
-                    if training_sets is None:
-                        print("Avesh: training_sets was None")
-                        training_sets = {}
+                    # global training_sets
+                    # if training_sets is None:
+                    #     training_sets = {}
 
-                    #try:
-                    print(training_sets)
-                    print("resp = ")
-                    print(resp)
-                    print(f"og_args = {og_args}")
-                    print(f"og_kwargs = {og_kwargs}")
-                    # except Exception as e:
-                    #     print(f"Avesh: Saw exception {e}")
-                    #     print()
+                    print(autologging_utils.fs_training_sets)
+                    print(f"resp = {resp}")
 
                     session.state = "succeeded"
 
