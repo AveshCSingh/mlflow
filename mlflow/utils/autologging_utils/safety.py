@@ -553,7 +553,7 @@ def safe_patch(
                         print(resp)
                         print(f"og_args = {og_args}")
                         print(f"og_kwargs = {og_kwargs}")
-                    except e:
+                    except Exception as e:
                         print(f"Avesh: Saw exception {str(e)}")
                         print(str(e.value))
 
