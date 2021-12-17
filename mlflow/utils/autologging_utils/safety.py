@@ -548,14 +548,13 @@ def safe_patch(
                         resp = patch_function(call_original, *args, **kwargs)
 
                     try:
-                        print(f"yo Avesh: training_sets = {training_sets}")
+                        print(training_sets)
                         print("resp = ")
                         print(resp)
                         print(f"og_args = {og_args}")
                         print(f"og_kwargs = {og_kwargs}")
                     except Exception as e:
-                        print(f"Avesh: Saw exception {str(e)}")
-                        print(str(e.value))
+                        print(f"Avesh: Saw exception")
 
                     session.state = "succeeded"
 
