@@ -61,6 +61,7 @@ from mlflow.utils.autologging_utils import (
 )
 from mlflow.tracking._model_registry import DEFAULT_AWAIT_MAX_SLEEP_SECONDS
 from mlflow.utils import autologging_utils
+import json
 
 FLAVOR_NAME = "sklearn"
 
@@ -1376,7 +1377,8 @@ def _autolog(
             print(f"Found training_sets: {autologging_utils.fs_training_sets}")
             input_cols_json = signature.to_dict()["inputs"]
             print(f"input_cols_json: {input_cols_json}")
-            # input_cols =
+            obj = json.loads(input_cols_json)
+            input_cols = tuple([x['name'] for x in obj])
             training_set = autologging_utils.fs_training_sets[input_cols]
             print(f"training_set: {training_set}")
 
