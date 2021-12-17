@@ -547,13 +547,16 @@ def safe_patch(
                     else:
                         resp = patch_function(call_original, *args, **kwargs)
 
-                    print("Avesh: training_sets = ")
-                    import pdb; pdb.set_trace()
-                    print(training_sets)
-                    print("resp = ")
-                    print(resp)
-                    print(f"og_args = {og_args}")
-                    print(f"og_kwargs = {og_kwargs}")
+                    try:
+                        print("Avesh: training_sets = ")
+                        print(training_sets)
+                        print("resp = ")
+                        print(resp)
+                        print(f"og_args = {og_args}")
+                        print(f"og_kwargs = {og_kwargs}")
+                    except e:
+                        print(f"Avesh: Saw exception {str(e)}")
+                        print(str(e.value))
 
                     session.state = "succeeded"
 
