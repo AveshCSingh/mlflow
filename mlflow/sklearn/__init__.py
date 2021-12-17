@@ -1374,7 +1374,7 @@ def _autolog(
 
             # TODO: Insert fs.log_model here
             print(f"Found training_sets: {autologging_utils.fs_training_sets}")
-            input_cols_json = tuple(signature.to_dict()["inputs"])
+            input_cols_json = signature.to_dict()["inputs"]
             print(f"input_cols_json: {input_cols_json}")
             # input_cols =
             training_set = autologging_utils.fs_training_sets[input_cols]
