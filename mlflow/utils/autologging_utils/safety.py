@@ -548,8 +548,7 @@ def safe_patch(
                         resp = patch_function(call_original, *args, **kwargs)
 
                     try:
-                        print("Avesh: training_sets = ")
-                        print(training_sets)
+                        print(f"yo Avesh: training_sets = {training_sets}")
                         print("resp = ")
                         print(resp)
                         print(f"og_args = {og_args}")
