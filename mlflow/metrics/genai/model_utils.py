@@ -11,9 +11,11 @@ _logger = logging.getLogger(__name__)
 
 
 # TODO: improve this name
-def score_model_on_payload(model_uri, payload):
+def score_model_on_payload(model_uri, payload, eval_parameters=None):
     """Call the model identified by the given uri with the given payload."""
 
+    if eval_parameters is None:
+        eval_parameters = {}
     prefix, suffix = _parse_model_uri(model_uri)
 
     if prefix == "openai":
