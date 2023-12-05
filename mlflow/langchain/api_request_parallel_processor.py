@@ -151,12 +151,15 @@ class APIRequest:
                         self.request_json = next(iter(self.request_json.values()))
                         if isinstance(self.request_json, np.ndarray):
                             self.request_json = self.request_json.tolist()
+                        _logger.warning(f"Avesh: self.request_json: {self.request_json}. type(self.request_json) = {type(self.request_json)}")
                         response = self.lc_model.invoke(self.request_json)
                 elif isinstance(self.request_json, list) and isinstance(
                     self.lc_model, runnables_supports_batch_types()
                 ):
+                    _logger.warning(f"Avesh2: self.request_json: {self.request_json}")
                     response = self.lc_model.batch(self.request_json)
                 else:
+                    _logger.warning(f"Avesh3: self.request_json: {self.request_json}")
                     response = self.lc_model.invoke(self.request_json)
             else:
                 response = self.lc_model(self.request_json, return_only_outputs=True)
