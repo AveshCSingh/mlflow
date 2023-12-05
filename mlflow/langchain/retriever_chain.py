@@ -122,7 +122,7 @@ class _RetrieverChain(Chain):
                 )
                 config = yaml.load(f, yaml.SafeLoader)
         else:
-            raise ValueError("File type must be json or yaml")
+            raise ValueError(f"File type must be json or yaml for file {file}")
 
         # Override default 'verbose' and 'memory' for the chain
         if verbose := kwargs.pop("verbose", None):
