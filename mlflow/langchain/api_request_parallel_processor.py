@@ -115,7 +115,7 @@ class APIRequest:
                 for doc in response["source_documents"]
             ]
 
-    def call_api(self, status_tracker: StatusTracker, callbackHandler: Optional[BaseCallbackHandler]):
+    def call_api(self, status_tracker: StatusTracker, callback_handler: Optional[BaseCallbackHandler]):
         """
         Calls the LangChain API and stores results.
         """
@@ -152,15 +152,15 @@ class APIRequest:
                         self.request_json = next(iter(self.request_json.values()))
                         if isinstance(self.request_json, np.ndarray):
                             self.request_json = self.request_json.tolist()
-                        response = self.lc_model.invoke(self.request_json,  config={"callbacks": [callbackHandler]})
+                        response = self.lc_model.invoke(self.request_json,  config={"callbacks": [callback_handler]})
                 elif isinstance(self.request_json, list) and isinstance(
                     self.lc_model, runnables_supports_batch_types()
                 ):
-                    response = self.lc_model.batch(self.request_json, config={"callbacks": [callbackHandler]})
+                    response = self.lc_model.batch(self.request_json, config={"callbacks": [callback_handler]})
                 else:
-                    response = self.lc_model.invoke(self.request_json, config={"callbacks": [callbackHandler]})
+                    response = self.lc_model.invoke(self.request_json, config={"callbacks": [callback_handler]})
             else:
-                response = self.lc_model(self.request_json, return_only_outputs=True, config={"callbacks": [callbackHandler]})
+                response = self.lc_model(self.request_json, return_only_outputs=True, config={"callbacks": [callback_handler]})
 
                 # to maintain existing code, single output chains will still return only the result
                 if len(response) == 1:
@@ -183,7 +183,7 @@ def process_api_requests(
     lc_model,
     requests: Optional[List[Union[Any, Dict[str, Any]]]] = None,
     max_workers: int = 10,
-    callbackHandler: Optional[BaseCallbackHandler] = None,
+    callback_handler: Optional[BaseCallbackHandler] = None,
 ):
     """
     Processes API requests in parallel.
@@ -222,7 +222,7 @@ def process_api_requests(
                 executor.submit(
                     next_request.call_api,
                     status_tracker=status_tracker,
-                    callbackHandler=callbackHandler
+                    callback_handler=callback_handler
                 )
                 next_request = None  # reset next_request to empty
 

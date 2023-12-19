@@ -476,7 +476,7 @@ class _LangChainModelWrapper:
                 "Input must be a pandas DataFrame or a list of strings or a list of dictionaries "
                 f"for model {self.lc_model.__class__.__name__}"
             )
-        return process_api_requests(lc_model=self.lc_model, requests=messages, callback_handler)
+        return process_api_requests(lc_model=self.lc_model, requests=messages, callback_handler=callback_handler)
 
 
 
