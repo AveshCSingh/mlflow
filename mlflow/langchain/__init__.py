@@ -439,9 +439,17 @@ class _LangChainModelWrapper:
         self.lc_model = lc_model
 
     def predict(  # pylint: disable=unused-argument
+            self,
+            data: Union[pd.DataFrame, List[Union[str, Dict[str, Any]]], Any],
+            params: Optional[Dict[str, Any]] = None,  # pylint: disable=unused-argument,
+    ) -> List[str]:
+        return self._predict_with_callbacks(data, params)
+
+    def _predict_with_callbacks(  # pylint: disable=unused-argument
         self,
         data: Union[pd.DataFrame, List[Union[str, Dict[str, Any]]], Any],
-        params: Optional[Dict[str, Any]] = None,  # pylint: disable=unused-argument
+        params: Optional[Dict[str, Any]] = None,  # pylint: disable=unused-argument,
+        callback_handler = None,  # langchain.callbacks.base.Basecallback_handler
     ) -> List[str]:
         """
         :param data: Model input data.
@@ -468,7 +476,8 @@ class _LangChainModelWrapper:
                 "Input must be a pandas DataFrame or a list of strings or a list of dictionaries "
                 f"for model {self.lc_model.__class__.__name__}"
             )
-        return process_api_requests(lc_model=self.lc_model, requests=messages)
+        return process_api_requests(lc_model=self.lc_model, requests=messages, callback_handler)
+
 
 
 class _TestLangChainWrapper(_LangChainModelWrapper):
