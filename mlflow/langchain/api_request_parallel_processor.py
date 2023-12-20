@@ -146,7 +146,7 @@ class APIRequest:
                     except Exception:
                         _logger.warning(
                             f"Failed to invoke {self.lc_model.__class__.__name__} "
-                            "with {self.request_json}. Error: {e!r}. Trying to "
+                            f"with {self.request_json}. Error: {e!r}. Trying to "
                             "invoke with the first value of the dictionary."
                         )
                         self.request_json = next(iter(self.request_json.values()))
