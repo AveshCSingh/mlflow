@@ -15,7 +15,7 @@ os.environ["MLFLOW_ENABLE_MULTI_TURN_EVALUATION"] = "true"
 mlflow.set_tracking_uri("http://localhost:5000")
 
 # Target experiment for bug bash
-EXPERIMENT_ID = "554741152990759220"
+EXPERIMENT_ID = "222228112133735103"
 SCRIPT_TAG = "bug_bash_knock_knock"
 
 

@@ -1,18 +1,31 @@
 #!/usr/bin/env python3
 """
-Evaluate conversation traces for ConversationCompleteness and UserFrustration.
+Evaluate conversation traces using single-turn and multi-turn scorers.
 
 This script retrieves traces from a specific MLflow experiment and evaluates
-them using built-in multi-turn conversation scorers.
+them using:
+1. Built-in multi-turn conversation scorers (ConversationCompleteness, UserFrustration)
+2. Built-in single-turn scorers (Safety, RelevanceToQuery)
+3. A combination of both single-turn and multi-turn scorers together
+
+The script demonstrates three evaluation approaches:
+- Direct scorer invocation on session groups
+- mlflow.genai.evaluate with multi-turn scorers only
+- mlflow.genai.evaluate with MIXED single-turn + multi-turn scorers
 """
 
 import os
 import sys
 import mlflow
-from mlflow.genai.scorers import ConversationCompleteness, UserFrustration
+from mlflow.genai.scorers import (
+    ConversationCompleteness,
+    UserFrustration,
+    Safety,
+    RelevanceToQuery,
+)
 
 # Experiment ID to evaluate
-EXPERIMENT_ID = "554741152990759220"
+EXPERIMENT_ID = "222228112133735103"
 
 # Tracking URI configuration
 # Set this to your MLflow server URL or use environment variable
@@ -142,34 +155,97 @@ def main():
     # Set the experiment for logging evaluation results
     mlflow.set_experiment(experiment_id=EXPERIMENT_ID)
 
-    # Run evaluation
-    print("\nRunning evaluation with ConversationCompleteness and UserFrustration scorers...")
-    results = mlflow.genai.evaluate(
+    # # Run evaluation
+    # print("\nRunning evaluation with ConversationCompleteness and UserFrustration scorers...")
+    # results = mlflow.genai.evaluate(
+    #     data=traces,
+    #     scorers=[completeness_scorer, frustration_scorer],
+    # )
+
+    # # Display results
+    # print("\n" + "="*80)
+    # print("EVALUATION RESULTS")
+    # print("="*80)
+
+    # # Show the results dataframe
+    # print("\nScorer Metrics:")
+    # print(results.metrics)
+
+    # print("\nAvailable result tables:")
+    # print(list(results.tables.keys()))
+
+    # print("\nDetailed Results:")
+    # # Get the main results table
+    # if results.tables:
+    #     main_table_key = list(results.tables.keys())[0]
+    #     results_table = results.tables[main_table_key]
+
+    #     # Show relevant columns from the results
+    #     result_cols = [col for col in results_table.columns
+    #                    if 'conversation' in col.lower() or 'frustration' in col.lower()]
+    #     if result_cols:
+    #         print(f"\nShowing columns: {result_cols}")
+    #         print(results_table[result_cols])
+    #     else:
+    #         print("\nShowing all columns:")
+    #         print(results_table)
+
+    # print("\n" + "="*80)
+    # print(f"Evaluation complete! Results logged to experiment {EXPERIMENT_ID}")
+    # print(f"Run ID: {results.run_id if hasattr(results, 'run_id') else 'N/A'}")
+    # print("="*80)
+
+    # =========================================================================
+    # PART 3: Use mlflow.genai.evaluate with MIXED single-turn and multi-turn scorers
+    # =========================================================================
+    print("\n" + "="*80)
+    print("PART 3: MIXED SINGLE-TURN AND MULTI-TURN SCORERS")
+    print("="*80)
+
+    # Initialize single-turn scorers
+    print("\nInitializing single-turn scorers...")
+    safety_scorer = Safety()
+    relevance_scorer = RelevanceToQuery()
+
+    print("  - Safety (single-turn)")
+    print("  - RelevanceToQuery (single-turn)")
+    print("  - ConversationCompleteness (multi-turn)")
+    print("  - UserFrustration (multi-turn)")
+
+    # Run evaluation with mixed scorers
+    print("\nRunning evaluation with MIXED scorers (2 single-turn + 2 multi-turn)...")
+    mixed_results = mlflow.genai.evaluate(
         data=traces,
-        scorers=[completeness_scorer, frustration_scorer],
+        scorers=[
+            safety_scorer,              # single-turn
+            relevance_scorer,           # single-turn
+            completeness_scorer,        # multi-turn
+            frustration_scorer,         # multi-turn
+        ],
     )
 
     # Display results
     print("\n" + "="*80)
-    print("EVALUATION RESULTS")
+    print("MIXED EVALUATION RESULTS")
     print("="*80)
 
     # Show the results dataframe
     print("\nScorer Metrics:")
-    print(results.metrics)
+    print(mixed_results.metrics)
 
     print("\nAvailable result tables:")
-    print(list(results.tables.keys()))
+    print(list(mixed_results.tables.keys()))
 
     print("\nDetailed Results:")
     # Get the main results table
-    if results.tables:
-        main_table_key = list(results.tables.keys())[0]
-        results_table = results.tables[main_table_key]
+    if mixed_results.tables:
+        main_table_key = list(mixed_results.tables.keys())[0]
+        results_table = mixed_results.tables[main_table_key]
 
         # Show relevant columns from the results
         result_cols = [col for col in results_table.columns
-                       if 'conversation' in col.lower() or 'frustration' in col.lower()]
+                       if any(keyword in col.lower() for keyword in
+                              ['safety', 'relevance', 'conversation', 'frustration'])]
         if result_cols:
             print(f"\nShowing columns: {result_cols}")
             print(results_table[result_cols])
@@ -178,8 +254,24 @@ def main():
             print(results_table)
 
     print("\n" + "="*80)
-    print(f"Evaluation complete! Results logged to experiment {EXPERIMENT_ID}")
-    print(f"Run ID: {results.run_id if hasattr(results, 'run_id') else 'N/A'}")
+    print(f"Mixed evaluation complete! Results logged to experiment {EXPERIMENT_ID}")
+    print(f"Run ID: {mixed_results.run_id if hasattr(mixed_results, 'run_id') else 'N/A'}")
+    print("="*80)
+
+    # =========================================================================
+    # SUMMARY
+    # =========================================================================
+    print("\n" + "="*80)
+    print("EVALUATION SUMMARY")
+    print("="*80)
+    print("\nThree evaluation approaches tested:")
+    print("  1. Direct scorer invocation on sessions")
+    print("  2. mlflow.genai.evaluate with multi-turn scorers only")
+    print("  3. mlflow.genai.evaluate with MIXED single-turn + multi-turn scorers")
+    print("\nKey insights:")
+    print("  - Single-turn scorers (Safety, RelevanceToQuery) evaluate individual traces")
+    print("  - Multi-turn scorers (ConversationCompleteness, UserFrustration) evaluate entire sessions")
+    print("  - mlflow.genai.evaluate handles both types seamlessly when provided together")
     print("="*80)
 
 
